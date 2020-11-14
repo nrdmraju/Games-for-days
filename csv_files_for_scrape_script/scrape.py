@@ -19,11 +19,11 @@ options = Options()
 driver = webdriver.Firefox(options=options)
 
 # create a log file for errors
-log = open(f'scrape_errors_{file.replace(".csv","")}.log')
+log = open(f'scrape_errors_{file.replace(".csv","")}.log', 'w+')
 
 # perform scrape
 
-for index, row in df[:10].iterrows():
+for index, row in df.iterrows():
     time.sleep(7)
     summary = {}
     url=row['url']
@@ -47,7 +47,9 @@ for index, row in df[:10].iterrows():
     except:
         print(f'driver could not pull the {game} from {url}')
         log.writerow(f'driver could not pull the {game} from {url}')
-    df.at[index, "Summary"] = url_summary    
+    df.at[index, "Summary"] = url_summary
+
+driver.quit()
 
 # write the dataframe to an output csv
 df.to_csv(f'../clean_csv_files/{file}')
