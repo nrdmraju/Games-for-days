@@ -19,13 +19,13 @@ options = Options()
 driver = webdriver.Firefox(options=options)
 
 # create a log file for errors
-log = open(f'scrape_errors_{file.replace(".csv","")}.log', 'w+')
+log = open(f'scrape_errors_{file.replace(".csv","")}.log', 'a')
 
 # perform scrape
 
 for index, row in df.iterrows():
-    time.sleep(7)
-    summary = {}
+    time.sleep(12)
+    
     url=row['url']
 #     print(url)
     game=row['Name']
@@ -39,18 +39,18 @@ for index, row in df.iterrows():
         
         try:
             url_summary = soup.find('',{'id':'gameBody'}).text
-            print(f'successfully retrieved summary for {game}')
+            print(f'successfully retrieved row summary for {game} at row {index}')
         except:
-            print(f'summary retrieval failed for {game}')
+            print(f'summary retrieval failed for {game} at row {index}')
             log.writerow(f'summary retrieval failed for {game}')
     
     except:
         print(f'driver could not pull the {game} from {url}')
-        log.writerow(f'driver could not pull the {game} from {url}')
+        log.writelines(f'driver could not pull the {game} from {url}')
     df.at[index, "Summary"] = url_summary
 
 driver.quit()
 
 # write the dataframe to an output csv
-df.to_csv(f'../clean_csv_files/{file}')
+df.to_csv(f'../clean_csv_files/{file}', index=False)
 
