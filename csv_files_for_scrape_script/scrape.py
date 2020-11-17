@@ -25,7 +25,7 @@ log = open(f'scrape_errors_{file.replace(".csv","")}.log', 'a')
 # perform scrape
 
 for index, row in df.iterrows():
-    time.sleep(12)
+    time.sleep(10)
     
     url=row['url']
 #     print(url)
